@@ -1,10 +1,11 @@
-# nas pastas dos exercicios so entram o codigo e os casos de teste
+# nas pastas dos exercicios so entram o codigo, os casos de teste e a base
 TP_*/*/*
 !TP_*/*/*.c
 !TP_*/*/*.h
 !TP_*/*/*.java
 !TP_*/*/pub.in
 !TP_*/*/pub.out
+!TP_*/*/veiculos.csv
 
 *.swp
 build/
