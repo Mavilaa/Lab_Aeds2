@@ -1,11 +1,10 @@
-# compilados
-*.class
-*.o
-*.exe
+# nas pastas dos exercicios so entram o codigo e os casos de teste
+TP_*/*/*
+!TP_*/*/*.c
+!TP_*/*/*.h
+!TP_*/*/*.java
+!TP_*/*/pub.in
+!TP_*/*/pub.out
 
-# saidas dos testes locais
-saida.txt
-diff.txt
-
-# vim
 *.swp
+build/

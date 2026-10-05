@@ -1,0 +1,38 @@
+name: testes
+
+on:
+  push:
+  pull_request:
+
+jobs:
+  pub:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Compila e compara com pub.out
+        shell: bash
+        run: |
+          # o Verde ignora espaco no fim da linha e a quebra de linha final
+          limpa() { sed -e 's/[[:space:]]*$//' -e '$a\'; }
+          falhas=0
+          for d in TP_*/*/; do
+            [ -f "$d/pub.in" ] || continue
+            rm -rf build && mkdir build
+            c=$(ls "$d"*.c 2>/dev/null | head -1)
+            if [ -n "$c" ]; then
+              gcc -o build/prog "$c" -lm
+              cmd="build/prog"
+            else
+              j=$(ls "$d"*.java | head -1)
+              javac -d build "$j"
+              cmd="java -cp build $(basename "$j" .java)"
+            fi
+            if diff <($cmd < "$d/pub.in" | limpa) <(limpa < "$d/pub.out") > /dev/null; then
+              echo "ok     $d"
+            else
+              echo "falhou $d"
+              falhas=$((falhas + 1))
+            fi
+          done
+          exit $falhas
