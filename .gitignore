@@ -1,0 +1,11 @@
+# compilados
+*.class
+*.o
+*.exe
+
+# saidas dos testes locais
+saida.txt
+diff.txt
+
+# vim
+*.swp
