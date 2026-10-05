@@ -19,14 +19,16 @@ jobs:
           for d in TP_*/*/; do
             [ -f "$d/pub.in" ] || continue
             rm -rf build && mkdir build
+            # a partir do TP2 os programas leem a base em /tmp, como no Verde
+            [ -f "$d/veiculos.csv" ] && cp "$d/veiculos.csv" /tmp/veiculos.csv
             c=$(ls "$d"*.c 2>/dev/null | head -1)
             if [ -n "$c" ]; then
               gcc -o build/prog "$c" -lm
               cmd="build/prog"
             else
-              j=$(ls "$d"*.java | head -1)
-              javac -d build "$j"
-              cmd="java -cp build $(basename "$j" .java)"
+              javac -d build "$d"*.java
+              principal=$(grep -l 'static void main' "$d"*.java | head -1)
+              cmd="java -cp build $(basename "$principal" .java)"
             fi
             if diff <($cmd < "$d/pub.in" | limpa) <(limpa < "$d/pub.out") > /dev/null; then
               echo "ok     $d"

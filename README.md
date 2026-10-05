@@ -2,8 +2,8 @@
 
 ![testes](https://github.com/mavilaa/Lab_Aeds2/actions/workflows/testes.yml/badge.svg)
 
-Exercícios do laboratório de Algoritmos e Estruturas de Dados II (PUC Minas).
-Enunciado do TP1 em [`TP_01a/tp1.pdf`](TP_01a/tp1.pdf).
+Exercícios e trabalhos práticos de Algoritmos e Estruturas de Dados II (PUC Minas).
+Os enunciados estão dentro de cada pasta (`tp1.pdf`, `tp2.pdf`).
 
 ## TP_01a
 
@@ -21,6 +21,25 @@ Enunciado do TP1 em [`TP_01a/tp1.pdf`](TP_01a/tp1.pdf).
 | Substring Mais Longa Sem Repetição | C | |
 | Validação de Senha | Java | |
 | Verificação de Anagrama | C | |
+
+## TP_02
+
+Todos usam a base de veículos do enunciado ([`TP_02/tp2.pdf`](TP_02/tp2.pdf)), lida de `/tmp/veiculos.csv` como no Verde.
+
+| Exercício | Linguagem |
+|---|---|
+| Modelagem | C e Java |
+| Pesquisa Binária | C |
+| Ordenação por Seleção | C |
+| Ordenação por Inserção | Java |
+| Ordenação por Counting Sort | C |
+| Ordenação por Radixsort | C |
+| Ordenação por Bucketsort | Java |
+| Lista com Alocação Sequencial | Java |
+| Lista com Alocação Flexível | C |
+| Lista Dupla com Alocação Flexível | Java |
+| Pilha com Alocação Flexível | Java |
+| Fila Circular com Alocação Sequencial | C |
 
 Cada pasta tem o código, o `pub.in` (entrada) e o `pub.out` (saída esperada).
 
