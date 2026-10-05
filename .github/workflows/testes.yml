@@ -11,7 +11,7 @@ jobs:
       - uses: actions/checkout@v4
 
       - name: Compila e compara com pub.out
-        shell: bash
+        shell: bash {0}
         run: |
           # o Verde ignora espaco no fim da linha e a quebra de linha final
           limpa() { sed -e 's/[[:space:]]*$//' -e '$a\'; }
