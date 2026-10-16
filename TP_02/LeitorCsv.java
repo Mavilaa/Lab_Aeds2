@@ -1,4 +1,3 @@
-package Tp_02;
 import java.util.*;
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -9,7 +8,7 @@ class date {
     private int mes;
     private int dia;
 
-    static date parsedate(String s) {
+    static date parseData(String s) {
         date data = new date();
         String sdata[] = s.split("-");
 
@@ -20,7 +19,7 @@ class date {
         return (data);
     }
 
-    String format() {
+    String format_data() {
         String date = "";
         date = String.format("%02d", this.dia) + '/' + String.format("%02d", this.mes) + '/'
                 + String.format("%04d", this.ano);
@@ -29,7 +28,7 @@ class date {
 
 }
 
-class Data {
+class veiculo {
     private int id;
     private String marca;
     private String modelo;
@@ -46,7 +45,7 @@ class Data {
     private boolean turbo;
     private date data;
 
-    public Data() {
+    public veiculo() {
         this.id = 0;
         this.marca = "\0";
         this.modelo = "\0";
@@ -125,9 +124,9 @@ class Data {
         return (this.data);
     }
 
-    static Data parseVeiculo(String s) {
+    static veiculo parse_Veiculo(String s) {
 
-        Data carro = new Data();
+        veiculo carro = new veiculo();
         String[] car = s.split(",");
         carro.data = new date();
         try {
@@ -145,7 +144,7 @@ class Data {
             carro.consumo_estrada = Double.parseDouble(car[11]);
             carro.co2 = Double.parseDouble(car[12]);
             carro.turbo = Boolean.parseBoolean(car[13]);
-            carro.data = date.parsedate(car[14]);
+            carro.data = date.parseData(car[14]);
 
         } catch (Exception e) {
             System.out.println("Nao foi possivel converter");
@@ -156,9 +155,9 @@ class Data {
 
     }
 
-    String format() {
+    String format_veiculo() {
         date dia = this.data;
-        String a = dia.format();
+        String a = dia.format_data();
         String dados = "";
         dados = ("[") + String.format("%d", this.id) + (" ## ") + this.marca + (" ## ") + this.modelo + (" ## ")
                 + String.format("%d", this.ano)
@@ -175,8 +174,8 @@ class Data {
 }
 
 class LeitorCsv {
-    public static Data[] ler(String path) {
-        Data[] veiculos = new Data[0];
+    public static veiculo[] lercsv(String path) {
+        veiculo[] veiculos = new veiculo[0];
         try {
             int n = 0;
             BufferedReader br = new BufferedReader(new FileReader(path));
@@ -185,11 +184,11 @@ class LeitorCsv {
                 n++;
             br.close();
 
-            veiculos = new Data[n];
+            veiculos = new veiculo[n];
             br = new BufferedReader(new FileReader(path));
             br.readLine();
             for (int i = 0; i < n; i++) {
-                veiculos[i] = Data.parseVeiculo(br.readLine());
+                veiculos[i] = veiculo.parse_Veiculo(br.readLine());
             }
             br.close();
         } catch (IOException e) {
@@ -199,8 +198,8 @@ class LeitorCsv {
     }
 
     public static void main(String args[]) {
-        Data[] carro = LeitorCsv.ler("veiculos.csv");
-        System.out.println(carro[300].format());
+        veiculo[] carro = LeitorCsv.lercsv("veiculos.csv");
+        System.out.println(carro[300].format_veiculo());
 
     }
 
