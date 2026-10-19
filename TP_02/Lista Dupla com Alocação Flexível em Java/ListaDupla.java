@@ -3,26 +3,30 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 
-class Data {
+class date {
     private int ano;
     private int mes;
     private int dia;
 
-    static Data parsedate(String s) {
-        Data data = new Data();
-        String sdata[] = s.split("-");
-        data.ano = Integer.parseInt(sdata[0]);
-        data.mes = Integer.parseInt(sdata[1]);
-        data.dia = Integer.parseInt(sdata[2]);
+    static date parseData(String s) {
+        date data = new date();
+        String[] sdata = s.split("-");
+
+        data.ano = Integer.parseInt(sdata[0].trim());
+        data.mes = Integer.parseInt(sdata[1].trim());
+        data.dia = Integer.parseInt(sdata[2].trim());
+
         return data;
     }
 
-    String format() {
-        return String.format("%02d/%02d/%04d", this.dia, this.mes, this.ano);
+    String format_data() {
+        return String.format(
+                "%02d/%02d/%04d",
+                this.dia, this.mes, this.ano);
     }
 }
 
-class Veiculo {
+class veiculo {
     private int id;
     private String marca;
     private String modelo;
@@ -37,19 +41,19 @@ class Veiculo {
     private double consumo_estrada;
     private double co2;
     private boolean turbo;
-    private Data data;
+    private date data;
 
-    public Veiculo() {
+    public veiculo() {
         this.id = 0;
-        this.marca = "";
-        this.modelo = "";
+        this.marca = "\0";
+        this.modelo = "\0";
         this.ano = 0;
-        this.categoria = "";
-        this.combustivel = "";
+        this.categoria = "\0";
+        this.combustivel = "\0";
         this.cilindros = 0;
         this.cilindrada = 0.0;
-        this.transmissao = "";
-        this.tracao = "";
+        this.transmissao = "\0";
+        this.tracao = "\0";
         this.consumo_cidade = 0.0;
         this.consumo_estrada = 0.0;
         this.co2 = 0.0;
@@ -113,46 +117,140 @@ class Veiculo {
         return this.turbo;
     }
 
-    Data get_data_registro() {
+    date get_data_registro() {
         return this.data;
     }
 
-    static Veiculo parseVeiculo(String s) {
-        Veiculo carro = new Veiculo();
+    static veiculo parse_Veiculo(String s) {
+        veiculo carro = new veiculo();
         String[] car = s.split(",");
-        carro.id = Integer.parseInt(car[0]);
-        carro.marca = car[1];
-        carro.modelo = car[2];
-        carro.ano = Integer.parseInt(car[3]);
-        carro.categoria = car[4];
-        String[] comb = car[5].split(";");
-        carro.combustivel = comb[0];
-        for (int i = 1; i < comb.length; i++) {
-            carro.combustivel = carro.combustivel + "," + comb[i];
-        }
-        carro.cilindros = Integer.parseInt(car[6]);
-        carro.cilindrada = Double.parseDouble(car[7]);
-        carro.transmissao = car[8];
-        carro.tracao = car[9];
-        carro.consumo_cidade = Double.parseDouble(car[10]);
-        carro.consumo_estrada = Double.parseDouble(car[11]);
-        carro.co2 = Double.parseDouble(car[12]);
-        carro.turbo = car[13].equals("true");
-        carro.data = Data.parsedate(car[14]);
+
+        carro.id = Integer.parseInt(car[0].trim());
+        carro.marca = car[1].trim();
+        carro.modelo = car[2].trim();
+        carro.ano = Integer.parseInt(car[3].trim());
+        carro.categoria = car[4].trim();
+        carro.combustivel = car[5].trim();
+        carro.cilindros = Integer.parseInt(car[6].trim());
+        carro.cilindrada = Double.parseDouble(car[7].trim());
+        carro.transmissao = car[8].trim();
+        carro.tracao = car[9].trim();
+        carro.consumo_cidade = Double.parseDouble(car[10].trim());
+        carro.consumo_estrada = Double.parseDouble(car[11].trim());
+        carro.co2 = Double.parseDouble(car[12].trim());
+        carro.turbo = Boolean.parseBoolean(car[13].trim());
+        carro.data = date.parseData(car[14].trim());
+
         return carro;
     }
 
-    String format() {
-        return String.format(Locale.US,
-                "[%d ## %s ## %s ## %d ## %s ## [%s] ## %d ## %.1f ## %s ## %s ## %.2f ## %.2f ## %.1f ## %b ## %s]",
-                this.id, this.marca, this.modelo, this.ano, this.categoria, this.combustivel, this.cilindros,
-                this.cilindrada, this.transmissao, this.tracao, this.consumo_cidade, this.consumo_estrada,
-                this.co2, this.turbo, this.data.format());
+    String format_combustivel() {
+        String resultado = "";
+
+        for (int i = 0; i < this.combustivel.length(); i++) {
+            char c = this.combustivel.charAt(i);
+
+            if (c == ';') {
+                c = ',';
+            }
+
+            resultado = resultado + c;
+        }
+
+        return resultado;
+    }
+
+    String format_veiculo() {
+        // Locale.US garante o ponto decimal (3.40) em qualquer maquina;
+        // com o locale pt_BR o "%.2f" imprimiria virgula (3,40).
+        return "["
+                + this.id
+                + " ## " + this.marca
+                + " ## " + this.modelo
+                + " ## " + this.ano
+                + " ## " + this.categoria
+                + " ## [" + format_combustivel() + "]"
+                + " ## " + this.cilindros
+                + " ## " + this.cilindrada
+                + " ## " + this.transmissao
+                + " ## " + this.tracao
+                + " ## " + String.format(Locale.US, "%.2f", this.consumo_cidade)
+                + " ## " + String.format(Locale.US, "%.2f", this.consumo_estrada)
+                + " ## " + this.co2
+                + " ## " + this.turbo
+                + " ## " + this.data.format_data()
+                + "]";
+    }
+}
+
+class LeitorCsv {
+
+    public static veiculo[] lercsv(String path) {
+        int n = 0;
+
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            br.readLine();
+
+            while (br.readLine() != null) {
+                n++;
+            }
+
+        } catch (IOException e) {
+            System.err.println(
+                    "Erro ao ler o arquivo: " + e.getMessage());
+            return new veiculo[0];
+        }
+
+        veiculo[] veiculos = new veiculo[n];
+
+        try (BufferedReader br = new BufferedReader(new FileReader(path))) {
+            br.readLine();
+
+            for (int i = 0; i < n; i++) {
+                veiculos[i] = veiculo.parse_Veiculo(br.readLine());
+            }
+
+        } catch (IOException e) {
+            System.err.println(
+                    "Erro ao ler o arquivo: " + e.getMessage());
+            return new veiculo[0];
+        }
+
+        return veiculos;
+    }
+}
+
+class Buscar {
+
+    veiculo buscar_id(veiculo[] carros, int id, int total) {
+        for (int i = 0; i < total; i++) {
+            if (carros[i].get_id() == id) {
+                return carros[i];
+            }
+        }
+
+        return null;
+    }
+
+    static String minusculo(String original) {
+        String minuscula = "";
+
+        for (int x = 0; x < original.length(); x++) {
+            char c = original.charAt(x);
+
+            if (c >= 'A' && c <= 'Z') {
+                c = (char) (c + 32);
+            }
+
+            minuscula = minuscula + c;
+        }
+
+        return minuscula;
     }
 }
 
 class CelulaDupla {
-    public Veiculo elemento;
+    public veiculo elemento;
     public CelulaDupla ant;
     public CelulaDupla prox;
 
@@ -160,7 +258,7 @@ class CelulaDupla {
         this(null);
     }
 
-    public CelulaDupla(Veiculo elemento) {
+    public CelulaDupla(veiculo elemento) {
         this.elemento = elemento;
         this.ant = null;
         this.prox = null;
@@ -184,8 +282,8 @@ class Lista {
         return tamanho;
     }
 
-    public void inserirInicio(Veiculo veiculo) {
-        CelulaDupla tmp = new CelulaDupla(veiculo);
+    public void inserirInicio(veiculo carro) {
+        CelulaDupla tmp = new CelulaDupla(carro);
         tmp.ant = primeiro;
         tmp.prox = primeiro.prox;
         primeiro.prox = tmp;
@@ -196,26 +294,26 @@ class Lista {
         }
     }
 
-    public void inserirFim(Veiculo veiculo) {
-        ultimo.prox = new CelulaDupla(veiculo);
+    public void inserirFim(veiculo carro) {
+        ultimo.prox = new CelulaDupla(carro);
         ultimo.prox.ant = ultimo;
         ultimo = ultimo.prox;
     }
 
-    public void inserir(Veiculo veiculo, int posicao) throws Exception {
+    public void inserir(veiculo carro, int posicao) throws Exception {
         int tamanho = tamanho();
         if (posicao < 0 || posicao > tamanho) {
             throw new Exception("Erro ao inserir!");
         } else if (posicao == 0) {
-            inserirInicio(veiculo);
+            inserirInicio(carro);
         } else if (posicao == tamanho) {
-            inserirFim(veiculo);
+            inserirFim(carro);
         } else {
             CelulaDupla i = primeiro;
             for (int j = 0; j < posicao; j++) {
                 i = i.prox;
             }
-            CelulaDupla tmp = new CelulaDupla(veiculo);
+            CelulaDupla tmp = new CelulaDupla(carro);
             tmp.ant = i;
             tmp.prox = i.prox;
             tmp.ant.prox = tmp;
@@ -223,30 +321,30 @@ class Lista {
         }
     }
 
-    public Veiculo removerInicio() throws Exception {
+    public veiculo removerInicio() throws Exception {
         if (primeiro == ultimo) {
             throw new Exception("Erro ao remover!");
         }
         CelulaDupla tmp = primeiro;
         primeiro = primeiro.prox;
-        Veiculo resp = primeiro.elemento;
+        veiculo resp = primeiro.elemento;
         tmp.prox = null;
         primeiro.ant = null;
         return resp;
     }
 
-    public Veiculo removerFim() throws Exception {
+    public veiculo removerFim() throws Exception {
         if (primeiro == ultimo) {
             throw new Exception("Erro ao remover!");
         }
-        Veiculo resp = ultimo.elemento;
+        veiculo resp = ultimo.elemento;
         ultimo = ultimo.ant;
         ultimo.prox.ant = null;
         ultimo.prox = null;
         return resp;
     }
 
-    public Veiculo remover(int posicao) throws Exception {
+    public veiculo remover(int posicao) throws Exception {
         int tamanho = tamanho();
         if (primeiro == ultimo || posicao < 0 || posicao >= tamanho) {
             throw new Exception("Erro ao remover!");
@@ -261,7 +359,7 @@ class Lista {
         }
         i.ant.prox = i.prox;
         i.prox.ant = i.ant;
-        Veiculo resp = i.elemento;
+        veiculo resp = i.elemento;
         i.prox = null;
         i.ant = null;
         return resp;
@@ -269,73 +367,54 @@ class Lista {
 
     public void mostrar() {
         for (CelulaDupla i = primeiro.prox; i != null; i = i.prox) {
-            System.out.println(i.elemento.format());
+            System.out.println(i.elemento.format_veiculo());
         }
     }
 }
 
-class ListaDupla {
-    public static Veiculo[] ler(String path) {
-        Veiculo[] veiculos = new Veiculo[0];
-        try {
-            int n = 0;
-            BufferedReader br = new BufferedReader(new FileReader(path));
-            br.readLine();
-            while (br.readLine() != null) {
-                n++;
-            }
-            br.close();
+public class ListaDupla {
 
-            veiculos = new Veiculo[n];
-            br = new BufferedReader(new FileReader(path));
-            br.readLine();
-            for (int i = 0; i < n; i++) {
-                veiculos[i] = Veiculo.parseVeiculo(br.readLine());
-            }
-            br.close();
-        } catch (IOException e) {
-            System.err.println("Erro ao ler o arquivo: " + e.getMessage());
-        }
-        return veiculos;
-    }
-
-    static Veiculo buscar(Veiculo[] carros, int id) {
-        for (int k = 0; k < carros.length; k++) {
-            if (carros[k].get_id() == id) {
-                return carros[k];
-            }
-        }
-        return null;
-    }
-
-    static void removido(Veiculo v) {
+    static void removido(veiculo v) {
         System.out.println("(R)" + v.get_marca() + " " + v.get_modelo());
     }
 
     public static void main(String args[]) throws Exception {
-        Veiculo[] carros = ler("/tmp/veiculos.csv");
-        Lista lista = new Lista();
         Scanner sc = new Scanner(System.in);
 
-        int numero = sc.nextInt();
-        while (numero != -1) {
-            Veiculo v = buscar(carros, numero);
-            if (v != null) {
-                lista.inserirFim(v);
+        veiculo[] veiculos = LeitorCsv.lercsv("/tmp/veiculos.csv");
+        Lista lista = new Lista();
+
+        Buscar busca = new Buscar();
+
+        int id;
+
+        while (sc.hasNextInt()) {
+            id = sc.nextInt();
+
+            if (id == -1) {
+                break;
             }
-            numero = sc.nextInt();
+
+            veiculo encontrado = busca.buscar_id(
+                    veiculos, id, veiculos.length);
+
+            if (encontrado != null) {
+                lista.inserirFim(encontrado);
+            }
         }
 
         int quantidade = sc.nextInt();
+
         for (int i = 0; i < quantidade; i++) {
             String comando = sc.next();
+
             if (comando.equals("II")) {
-                lista.inserirInicio(buscar(carros, sc.nextInt()));
+                lista.inserirInicio(busca.buscar_id(veiculos, sc.nextInt(), veiculos.length));
             } else if (comando.equals("I*")) {
                 int posicao = sc.nextInt();
-                lista.inserir(buscar(carros, sc.nextInt()), posicao);
+                lista.inserir(busca.buscar_id(veiculos, sc.nextInt(), veiculos.length), posicao);
             } else if (comando.equals("IF")) {
-                lista.inserirFim(buscar(carros, sc.nextInt()));
+                lista.inserirFim(busca.buscar_id(veiculos, sc.nextInt(), veiculos.length));
             } else if (comando.equals("RI")) {
                 removido(lista.removerInicio());
             } else if (comando.equals("R*")) {
@@ -344,6 +423,7 @@ class ListaDupla {
                 removido(lista.removerFim());
             }
         }
+
         sc.close();
 
         lista.mostrar();
