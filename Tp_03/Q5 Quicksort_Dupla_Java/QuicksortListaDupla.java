@@ -343,8 +343,7 @@ class Quicksort {
                 dir_index--;
             }
             if (esq_index <= dir_index) {
-                swap(i, j); // troca os dois carros de lugar se forem iguais ou quando desrespeitarem o
-                // while
+                swap(i, j);
                 i = i.prox;
                 esq_index++;
                 j = j.ant;

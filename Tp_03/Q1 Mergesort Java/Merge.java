@@ -161,8 +161,6 @@ class veiculo {
     }
 
     String format_veiculo() {
-        // Locale.US garante o ponto decimal (3.40) em qualquer maquina;
-        // com o locale pt_BR o "%.2f" imprimiria virgula (3,40).
         return "["
                 + this.id
                 + " ## " + this.marca
@@ -294,8 +292,7 @@ class Mergesort {
 
         while (iEsq < nEsq && iDir < nDir) {
 
-            // Em caso de empate, escolhe o elemento da direita.
-            if (comparar(vetEsq[iEsq], vetDir[iDir]) < 0) {
+            if (comparar(vetEsq[iEsq], vetDir[iDir]) <= 0) {
                 carros[k] = vetEsq[iEsq];
                 iEsq++;
             } else {
@@ -336,7 +333,7 @@ public class Merge {
     public static void main(String args[]) {
         Scanner sc = new Scanner(System.in);
 
-        veiculo[] veiculos = LeitorCsv.lercsv("veiculos.csv");
+        veiculo[] veiculos = LeitorCsv.lercsv("/tmp/veiculos.csv");
         veiculo[] escolhidos = new veiculo[veiculos.length];
 
         Buscar busca = new Buscar();

@@ -92,7 +92,6 @@ veiculo *parse_Veiculo(char *s) {
     car[13] = strtok(NULL, ",");
     car[14] = strtok(NULL, ",");
 
-    // carro.data = new_date();
     carro->id = atoi(car[0]);
     sprintf(carro->marca, "%s", car[1]);
     sprintf(carro->modelo, "%s", car[2]);

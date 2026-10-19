@@ -197,8 +197,7 @@ void quick_sort(veiculo carros[], int n, int esq, int dir) {
         while (comparar(carros[j], pivo) > 0)
             j--;
         if (i <= j) {
-            swap(carros, carros[i], carros[j], i,
-                 j); // troca os dois carros de lugar se forem iguais ou quando desrespeitarem o while
+            swap(carros, carros[i], carros[j], i, j);
             i++;
             j--;
         }
@@ -217,7 +216,7 @@ int main() {
     int n = 0;
     char formatado[1000];
 
-    veiculo *carros = lercsv("veiculos.csv", &total);
+    veiculo *carros = lercsv("/tmp/veiculos.csv", &total);
     veiculo *selecionado = new_veiculos(total);
 
     while (scanf("%d", &numero) == 1 && numero != -1) {

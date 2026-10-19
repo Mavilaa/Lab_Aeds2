@@ -200,7 +200,7 @@ void quick_sort(veiculo carros[], int n, int esq, int dir) {
     if (comparar(carros[meio], carros[dir]) > 0) {
         swap(carros, carros[meio], carros[dir], meio, dir);
     }
-    veiculo pivo = carros[meio]; // depois das trocas, o meio é a mediana dos três
+    veiculo pivo = carros[meio];
 
     while (i <= j) {
         while (comparar(carros[i], pivo) < 0)
@@ -208,9 +208,7 @@ void quick_sort(veiculo carros[], int n, int esq, int dir) {
         while (comparar(carros[j], pivo) > 0)
             j--;
         if (i <= j) {
-            swap(carros, carros[i], carros[j], i,
-                 j); // troca os dois carros de lugar se forem iguais ou quando
-                     // desrespeitarem o while
+            swap(carros, carros[i], carros[j], i, j);
             i++;
             j--;
         }

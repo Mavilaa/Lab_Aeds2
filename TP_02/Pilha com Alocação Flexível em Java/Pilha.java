@@ -161,8 +161,6 @@ class veiculo {
     }
 
     String format_veiculo() {
-        // Locale.US garante o ponto decimal (3.40) em qualquer maquina;
-        // com o locale pt_BR o "%.2f" imprimiria virgula (3,40).
         return "["
                 + this.id
                 + " ## " + this.marca

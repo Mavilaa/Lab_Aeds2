@@ -161,8 +161,6 @@
         }
 
         String format_veiculo() {
-            // Locale.US garante o ponto decimal (3.40) em qualquer maquina;
-            // com o locale pt_BR o "%.2f" imprimiria virgula (3,40).
             return "["
                     + this.id
                     + " ## " + this.marca
@@ -277,7 +275,6 @@
 
         void heapsort() {
 
-            // Construção do heap
             for (int tam = 2; tam <= n; tam++) {
                 construir(tam);
             }
@@ -339,7 +336,7 @@
         public static void main(String args[]) {
             Scanner sc = new Scanner(System.in);
 
-            veiculo[] veiculos = LeitorCsv.lercsv("veiculos.csv");
+            veiculo[] veiculos = LeitorCsv.lercsv("/tmp/veiculos.csv");
             veiculo[] escolhidos = new veiculo[veiculos.length+1];
 
             Buscar busca = new Buscar();
