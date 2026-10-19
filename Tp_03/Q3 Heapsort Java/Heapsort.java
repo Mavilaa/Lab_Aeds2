@@ -12,9 +12,9 @@
             date data = new date();
             String[] sdata = s.split("-");
 
-            data.ano = Integer.parseInt(sdata[0].trim());
-            data.mes = Integer.parseInt(sdata[1].trim());
-            data.dia = Integer.parseInt(sdata[2].trim());
+            data.ano = Integer.parseInt(sdata[0]);
+            data.mes = Integer.parseInt(sdata[1]);
+            data.dia = Integer.parseInt(sdata[2]);
 
             return data;
         }
@@ -125,21 +125,21 @@
             veiculo carro = new veiculo();
             String[] car = s.split(",");
 
-            carro.id = Integer.parseInt(car[0].trim());
-            carro.marca = car[1].trim();
-            carro.modelo = car[2].trim();
-            carro.ano = Integer.parseInt(car[3].trim());
-            carro.categoria = car[4].trim();
-            carro.combustivel = car[5].trim();
-            carro.cilindros = Integer.parseInt(car[6].trim());
-            carro.cilindrada = Double.parseDouble(car[7].trim());
-            carro.transmissao = car[8].trim();
-            carro.tracao = car[9].trim();
-            carro.consumo_cidade = Double.parseDouble(car[10].trim());
-            carro.consumo_estrada = Double.parseDouble(car[11].trim());
-            carro.co2 = Double.parseDouble(car[12].trim());
-            carro.turbo = Boolean.parseBoolean(car[13].trim());
-            carro.data = date.parseData(car[14].trim());
+            carro.id = Integer.parseInt(car[0]);
+            carro.marca = car[1];
+            carro.modelo = car[2];
+            carro.ano = Integer.parseInt(car[3]);
+            carro.categoria = car[4];
+            carro.combustivel = car[5];
+            carro.cilindros = Integer.parseInt(car[6]);
+            carro.cilindrada = Double.parseDouble(car[7]);
+            carro.transmissao = car[8];
+            carro.tracao = car[9];
+            carro.consumo_cidade = Double.parseDouble(car[10]);
+            carro.consumo_estrada = Double.parseDouble(car[11]);
+            carro.co2 = Double.parseDouble(car[12]);
+            carro.turbo = Boolean.parseBoolean(car[13]);
+            carro.data = date.parseData(car[14]);
 
             return carro;
         }
